@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 
-<!--處理輸入參數 ?displayName=小華&userId=U722be0c9c9d36e011c0e556bd2047819&pictureUrl=www.google.com-->
+<!--處理輸入參數 ?displayName=俞承漢Hank&userId=U74c38b7cff05bb45942c9d43e2f4bf43&pictureUrl=www.google.com-->
 <!--?API=60&UserName=小華&ChallengeId=T0003&UserId=U722be0c9c9d36e011c0e556bd2047819&PhoneNumber=09XXXXX333-->
 
 <head>
@@ -69,6 +69,7 @@
     <p>
       <label>生日(必填，Inbody 量測需要)</label>
       <input id="birthday" class="w3-input" type="text" placeholder="格式 2020-01-01"></p>      
+<!--
     <p>     
       <label>身高(必填，Inbody 量測需要)</label>
       <input id="bodyHeight" class="inputWithUnit" type="text" placeholder="例如: 180cm">cm</p>
@@ -77,9 +78,11 @@
       <label>體重(必填，Inbody 量測需要)</label>
       <input id="bodyWeight" class="inputWithUnit" type="text" placeholder="例如: 60kg">kg</p>
       <div style="height: 1px; margin-top: -15px; border-bottom-style: solid;border-width: 1px;border-color: lightgray"></div>      
+-->
     <p>          
       <label>電話(必填，聯絡使用)</label>
       <input id="phone" class="w3-input" type="text"></p>
+<!--
     <p>
       <label>身分證號(必填，作為會員身份辨識，不用做其他用途)</label>
       <input id="identity" class="w3-input" type="text"></p>
@@ -92,6 +95,7 @@
     <p>
       <label>地址(建議，聯絡使用)</label>
       <input id="address" class="w3-input" type="text"></p>
+-->
     <p>          
       <button class="w3-btn w3-block w3-indigo" onclick="addConfirm()">送出資料</button>
     </p>
@@ -264,7 +268,8 @@
         if (useLocalAPIs) {
           request.open('GET', 'http://localhost:5000' + param, true);
         } else {
-          request.open('GET', 'https://api-linko-sports-center.herokuapp.com/'+param, true);
+//          request.open('GET', 'https://api-linko-sports-center.herokuapp.com/'+param, true);
+          request.open('GET', 'https://xinzhuang-api-for-firebase.herokuapp.com/'+param, true);
         }
 
         request.onload = function() {
@@ -518,7 +523,7 @@
       });
                             
       paramToSend = "?API=50&UserId="+userId[1]
-                     +"&SiteId="+"LINKOU" // change this for other site
+                     +"&SiteId="+"XINZHUANG" // change this for other site
                      +"&ExerciseId=" + "00"
                      +"&DataType=" + "distance"
                      +"&DateStart=" + modifyDate(startDate, 0)
@@ -528,7 +533,9 @@
       
       // 必須用同步，不然會出錯，可能是 apiForFirebase 中對於 uGym API 的呼叫重疊會造成錯誤，還沒想到好的做法，就先用同步方式
       var request=new XMLHttpRequest();
-      request.open('GET', 'https://api-linko-sports-center.herokuapp.com/'+paramToSend, false);  
+//      request.open('GET', 'https://api-linko-sports-center.herokuapp.com/'+paramToSend, false);  
+      request.open('GET', 'https://xinzhuang-api-for-firebase.herokuapp.com/'+paramToSend, false);  
+      
 
       request.send();
 
@@ -642,22 +649,25 @@
         freeChallenge = false;
         couponMember.forEach(function(coupon, index, array){
           if (coupon[0]==inCoupon[i]) {
-            for (var j=1;j<coupon.length;j++){            
-              if (coupon[j][3]==userId[1]) {
-                if (coupon[j][2] =="已繳費")  confirmed=true;
-                if (coupon[j][2] =="已兌換")  已兌換=true;                 
+            for (var j=1;j<coupon.length;j++){  
+              //if (coupon[j][3]==coupon[j][2]) {
+                console.log(coupon[j][2]);
+                if (coupon[j][2].includes("已繳費")) confirmed=true;
+                if (coupon[j][2] =="已兌換")  已兌換=true;        //沒有作用，先不改         
                 if (coupon[j][2] =="免費")   freeChallenge=true;                
-                if (coupon[j][2] =="0")     freeChallenge=true;                 
-              }              
+                if (coupon[j][2] =="0")     freeChallenge=true; //沒有作用，先不改                
+              //}              
             };
           }
         });
         
+        //console.log(freeChallenge); 
+        
         var confirmedStr;
         if (freeChallenge) {
-          confirmedStr = "兌換";//"免費挑戰賽";
+          confirmedStr = "加油";//"免費挑戰賽";
         } else if (confirmed) {
-          confirmedStr = "兌換";//"已繳費";
+          confirmedStr = "加油";//"已繳費";
         } else if (已兌換){
           confirmedStr = "已兌換";
         } else {
@@ -742,7 +752,8 @@
       if (useLocalAPIs) {
         request.open('GET', 'http://localhost:5000' + paramToSend, true);
       } else {
-        request.open('GET', 'https://api-linko-sports-center.herokuapp.com/'+paramToSend, true);
+//        request.open('GET', 'https://api-linko-sports-center.herokuapp.com/'+paramToSend, true);
+        request.open('GET', 'https://xinzhuang-api-for-firebase.herokuapp.com/'+paramToSend, true);
       }
 
       request.onload = function() {
@@ -771,7 +782,8 @@
       if (useLocalAPIs) {
         request.open('GET', 'http://localhost:5000' + paramToSend, true);
       } else {
-        request.open('GET', 'https://api-linko-sports-center.herokuapp.com/'+paramToSend, true);
+//        request.open('GET', 'https://api-linko-sports-center.herokuapp.com/'+paramToSend, true);
+        request.open('GET', 'https://xinzhuang-api-for-firebase.herokuapp.com/'+paramToSend, true);
       }
 
       request.onload = function() {
